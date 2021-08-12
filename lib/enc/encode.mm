@@ -961,7 +961,7 @@ ogg_uint32_t PickIntra( CP_INSTANCE *cpi,
           /* Now actually code the blocks. */
           for ( B=0; B<4; B++ ) {
             FragIndex = QuadMapToIndex1( cpi->pb.BlockMap, SB, MB, B );
-            cpi->pb.FragCodingMethod[FragIndex] = cpi->MBCodingMode;
+            cpi->pb.FragCodingMethod[FragIndex] = (CODING_MODE)cpi->MBCodingMode;
           }
 
           /* Matching fragments in the U and V planes */
@@ -969,11 +969,8 @@ ogg_uint32_t PickIntra( CP_INSTANCE *cpi,
           UVColumn = (FragIndex % cpi->pb.HFragments) / 2;
           UVFragOffset = (UVRow * (cpi->pb.HFragments / 2)) + UVColumn;
 
-          cpi->pb.FragCodingMethod[cpi->pb.YPlaneFragments + UVFragOffset] =
-            cpi->MBCodingMode;
-          cpi->pb.FragCodingMethod[cpi->pb.YPlaneFragments +
-                                  cpi->pb.UVPlaneFragments + UVFragOffset] =
-            cpi->MBCodingMode;
+          cpi->pb.FragCodingMethod[cpi->pb.YPlaneFragments + UVFragOffset] = (CODING_MODE)cpi->MBCodingMode;
+          cpi->pb.FragCodingMethod[cpi->pb.YPlaneFragments + cpi->pb.UVPlaneFragments + UVFragOffset] = (CODING_MODE)cpi->MBCodingMode;
 
         }
       }
@@ -1022,7 +1019,7 @@ static void SetFragMotionVectorAndMode(CP_INSTANCE *cpi,
   /* Note the coding mode and vector for each block */
   cpi->pb.FragMVect[FragIndex].x = ThisMotionVector->x;
   cpi->pb.FragMVect[FragIndex].y = ThisMotionVector->y;
-  cpi->pb.FragCodingMethod[FragIndex] = MBCodingMode;
+  cpi->pb.FragCodingMethod[FragIndex] = (CODING_MODE)MBCodingMode;
 }
 
 static void SetMBMotionVectorsAndMode(CP_INSTANCE *cpi,
@@ -1467,10 +1464,10 @@ ogg_uint32_t PickModes(CP_INSTANCE *cpi,
     return 0;
 
 
-  InterErrors = malloc(num_threads * sizeof(*InterErrors));
-  IntraErrors = malloc(num_threads * sizeof(*IntraErrors));
-  mvList = malloc(cpi->pb.UnitFragments * sizeof(*mvList));
-  thread_SBRows = malloc(num_threads * sizeof(*thread_SBRows));
+  InterErrors = (unsigned int *)malloc(num_threads * sizeof(*InterErrors));
+  IntraErrors = (unsigned int *)malloc(num_threads * sizeof(*IntraErrors));
+  mvList = (threadMvList *)malloc(cpi->pb.UnitFragments * sizeof(*mvList));
+  thread_SBRows = (int *)malloc(num_threads * sizeof(*thread_SBRows));
   threads = (pthread_t *)malloc(num_threads*sizeof(*threads));
   p = (THREAD_PARAM *)malloc(num_threads*sizeof(*p));
 

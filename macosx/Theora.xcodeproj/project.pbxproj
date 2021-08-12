@@ -72,7 +72,7 @@
 		738837250B1928DB005C7A69 /* cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 73514EC30B0C7E3200CEC060 /* cpu.c */; };
 		738837260B1928E1005C7A69 /* dsp.c in Sources */ = {isa = PBXBuildFile; fileRef = 73514EC40B0C7E3200CEC060 /* dsp.c */; };
 		738837270B1929EC005C7A69 /* dct_encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 734A75C709D76C7E002D8FAE /* dct_encode.c */; };
-		7388372A0B1929F4005C7A69 /* encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 734A75CA09D76C7E002D8FAE /* encode.c */; };
+		7388372A0B1929F4005C7A69 /* encode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 734A75CA09D76C7E002D8FAE /* encode.mm */; };
 		7388372B0B1929FE005C7A69 /* encoder_toplevel.c in Sources */ = {isa = PBXBuildFile; fileRef = 734A75CB09D76C7E002D8FAE /* encoder_toplevel.c */; };
 /* End PBXBuildFile section */
 
@@ -107,7 +107,7 @@
 		734A75C609D76C7E002D8FAE /* dct_decode.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = dct_decode.c; path = ../lib/enc/dct_decode.c; sourceTree = SOURCE_ROOT; };
 		734A75C709D76C7E002D8FAE /* dct_encode.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = dct_encode.c; path = ../lib/enc/dct_encode.c; sourceTree = SOURCE_ROOT; };
 		734A75C809D76C7E002D8FAE /* dct.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = dct.c; path = ../lib/enc/dct.c; sourceTree = SOURCE_ROOT; };
-		734A75CA09D76C7E002D8FAE /* encode.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encode.c; path = ../lib/enc/encode.c; sourceTree = SOURCE_ROOT; };
+		734A75CA09D76C7E002D8FAE /* encode.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = encode.mm; path = ../lib/enc/encode.mm; sourceTree = SOURCE_ROOT; };
 		734A75CB09D76C7E002D8FAE /* encoder_toplevel.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encoder_toplevel.c; path = ../lib/enc/encoder_toplevel.c; sourceTree = SOURCE_ROOT; };
 		734A75CC09D76C7E002D8FAE /* frarray.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = frarray.c; path = ../lib/enc/frarray.c; sourceTree = SOURCE_ROOT; };
 		734A75CD09D76C7E002D8FAE /* frinit.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = frinit.c; path = ../lib/enc/frinit.c; sourceTree = SOURCE_ROOT; };
@@ -207,7 +207,7 @@
 				734A75C609D76C7E002D8FAE /* dct_decode.c */,
 				734A75C709D76C7E002D8FAE /* dct_encode.c */,
 				734A75C809D76C7E002D8FAE /* dct.c */,
-				734A75CA09D76C7E002D8FAE /* encode.c */,
+				734A75CA09D76C7E002D8FAE /* encode.mm */,
 				734A75CB09D76C7E002D8FAE /* encoder_toplevel.c */,
 				734A75CC09D76C7E002D8FAE /* frarray.c */,
 				734A75CD09D76C7E002D8FAE /* frinit.c */,
@@ -406,7 +406,7 @@
 				738837250B1928DB005C7A69 /* cpu.c in Sources */,
 				738837260B1928E1005C7A69 /* dsp.c in Sources */,
 				738837270B1929EC005C7A69 /* dct_encode.c in Sources */,
-				7388372A0B1929F4005C7A69 /* encode.c in Sources */,
+				7388372A0B1929F4005C7A69 /* encode.mm in Sources */,
 				7388372B0B1929FE005C7A69 /* encoder_toplevel.c in Sources */,
 				097729100BCABCAA00303091 /* apiwrapper.c in Sources */,
 				097729120BCABCAA00303091 /* decinfo.c in Sources */,
