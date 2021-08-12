@@ -15,6 +15,8 @@
 
  ********************************************************************/
 
+#import <Foundation/Foundation.h>
+
 #include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1437,133 +1439,122 @@ ogg_uint32_t PickModes(CP_INSTANCE *cpi,
                        ogg_uint32_t SBRows, ogg_uint32_t SBCols,
                        ogg_uint32_t PixelsPerLine,
                        ogg_uint32_t *InterError, ogg_uint32_t *IntraError) {
-  const int num_threads = cpi->numThreads; /* Number of Threads */
+    
 
-  ogg_uint32_t *InterErrors = NULL;
-  ogg_uint32_t *IntraErrors = NULL;
-  THREAD_MV_LIST* mvList = NULL;
-  int* thread_SBRows = NULL;
-  pthread_t *threads = NULL;
-  THREAD_PARAM *p = NULL;
-
-  ogg_uint32_t  SBrow;      /* Super-Block row number */
-  int thread_id;
-
-  unsigned char QIndex;
-
-  /* initialize error scores */
-  *InterError = 0;
-  *IntraError = 0;
-
-  /* clear down the default motion vector. */
-  cpi->MvListCount = 0;
-
-  QIndex = (unsigned char)cpi->pb.FrameQIndex;
-
-  if(!cpi->MotionCompensation)
-    return 0;
-
-
-  InterErrors = (unsigned int *)malloc(num_threads * sizeof(*InterErrors));
-  IntraErrors = (unsigned int *)malloc(num_threads * sizeof(*IntraErrors));
-  mvList = (threadMvList *)malloc(cpi->pb.UnitFragments * sizeof(*mvList));
-  thread_SBRows = (int *)malloc(num_threads * sizeof(*thread_SBRows));
-  threads = (pthread_t *)malloc(num_threads*sizeof(*threads));
-  p = (THREAD_PARAM *)malloc(num_threads*sizeof(*p));
-
-
-  /* change the quatization matrix to the one at best Q to compute the
+    const int num_threads = cpi->numThreads; /* Number of Threads */
+    
+    ogg_uint32_t *InterErrors = NULL;
+    ogg_uint32_t *IntraErrors = NULL;
+    THREAD_MV_LIST* mvList = NULL;
+    int* thread_SBRows = NULL;
+    THREAD_PARAM *p = NULL;
+        
+    ogg_uint32_t  SBrow;      /* Super-Block row number */
+    int thread_id;
+        
+    unsigned char QIndex;
+        
+    /* initialize error scores */
+    *InterError = 0;
+    *IntraError = 0;
+        
+    /* clear down the default motion vector. */
+    cpi->MvListCount = 0;
+        
+    QIndex = (unsigned char)cpi->pb.FrameQIndex;
+        
+    if(!cpi->MotionCompensation) return 0;
+        
+    InterErrors = (ogg_uint32_t *)malloc(num_threads * sizeof(*InterErrors));
+    IntraErrors = (ogg_uint32_t *)malloc(num_threads * sizeof(*IntraErrors));
+    mvList = (THREAD_MV_LIST *)malloc(cpi->pb.UnitFragments * sizeof(*mvList));
+    thread_SBRows = (int *)malloc(num_threads * sizeof(*thread_SBRows));
+    p = (THREAD_PARAM *)malloc(num_threads*sizeof(*p));
+        
+    /* change the quatization matrix to the one at best Q to compute the
      new error score */
-  cpi->MinImprovementForNewMV = (MvThreshTable[QIndex] << 12);
-  cpi->InterTripOutThresh = (5000<<12);
-  cpi->MVChangeFactor = MVChangeFactorTable[QIndex]; /* 0.9 */
-
-  if ( cpi->pb.info.quick_p ) {
-    cpi->ExhaustiveSearchThresh = (1000<<12);
-    cpi->FourMVThreshold = (2500<<12);
-  } else {
-    cpi->ExhaustiveSearchThresh = (250<<12);
-    cpi->FourMVThreshold = (500<<12);
-  }
-  cpi->MinImprovementForFourMV = cpi->MinImprovementForNewMV * 4;
-
-  if(cpi->MinImprovementForFourMV < (40<<12))
-    cpi->MinImprovementForFourMV = (40<<12);
-
-  cpi->FourMvChangeFactor = 8; /* cpi->MVChangeFactor - 0.05;  */
-
-
-  memset(mvList, 0, cpi->pb.UnitFragments * sizeof(*mvList));
-  memset(InterErrors, 0, num_threads * sizeof(*InterErrors));
-  memset(IntraErrors, 0, num_threads * sizeof(*IntraErrors));
-
-  { /* Balance the number of SB rows per thread */
-    const int rows_per_thread = SBRows/num_threads;
-    const int fractional_part = SBRows - (rows_per_thread) * num_threads;
-    for (thread_id=0; thread_id < num_threads; thread_id++) {
-      if (thread_id < fractional_part)
-	thread_SBRows[thread_id] = rows_per_thread + 1;
-      else
-	thread_SBRows[thread_id] = rows_per_thread;
+    cpi->MinImprovementForNewMV = (MvThreshTable[QIndex] << 12);
+    cpi->InterTripOutThresh = (5000<<12);
+    cpi->MVChangeFactor = MVChangeFactorTable[QIndex]; /* 0.9 */
+        
+    //cpi->pb.info.quick_p = true;
+    if ( cpi->pb.info.quick_p ) {
+      cpi->ExhaustiveSearchThresh = (1000<<12);
+      cpi->FourMVThreshold = (2500<<12);
+    } else {
+      cpi->ExhaustiveSearchThresh = (250<<12);
+      cpi->FourMVThreshold = (500<<12);
     }
+    cpi->MinImprovementForFourMV = cpi->MinImprovementForNewMV * 4;
+        
+    if(cpi->MinImprovementForFourMV < (40<<12))
+      cpi->MinImprovementForFourMV = (40<<12);
+        
+    cpi->FourMvChangeFactor = 8; /* cpi->MVChangeFactor - 0.05;  */
+        
+    memset(mvList, 0, cpi->pb.UnitFragments * sizeof(*mvList));
+    memset(InterErrors, 0, num_threads * sizeof(*InterErrors));
+    memset(IntraErrors, 0, num_threads * sizeof(*IntraErrors));
+        
+    { /* Balance the number of SB rows per thread */
+      const int rows_per_thread = SBRows/num_threads;
+      const int fractional_part = SBRows - (rows_per_thread) * num_threads;
+      for (thread_id=0; thread_id < num_threads; thread_id++) {
+        if (thread_id < fractional_part)
+          thread_SBRows[thread_id] = rows_per_thread + 1;
+        else
+          thread_SBRows[thread_id] = rows_per_thread;
+      }
+    }
+        
+    SBrow = 0;
+        
+    dispatch_group_t _group = dispatch_group_create();
+    dispatch_queue_t _queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH,0);
+
+    for(thread_id=0; thread_id<num_threads;thread_id++) {
+            
+      p[thread_id].cpi = cpi;
+      p[thread_id].SBStartRow = SBrow;
+      SBrow += thread_SBRows[thread_id];
+      p[thread_id].SBEndRow = SBrow;
+      p[thread_id].SBCols = SBCols;
+      p[thread_id].PixelsPerLine = PixelsPerLine;
+      p[thread_id].mvList = mvList;
+      p[thread_id].InterError = &InterErrors[thread_id];
+      p[thread_id].IntraError = &IntraErrors[thread_id];
+    
+      dispatch_group_async(_group,_queue,^{
+        ThreadPickModes((void *)(&p[thread_id]));
+      });
   }
 
-  SBrow = 0;
-  /* decide what block type and motion vectors to use on all of the frames */
-  for ( thread_id=0; thread_id<num_threads-1; thread_id++ ) {
-    p[thread_id].cpi = cpi;
-    p[thread_id].SBStartRow = SBrow;
-    SBrow += thread_SBRows[thread_id];
-    p[thread_id].SBEndRow = SBrow;
-    p[thread_id].SBCols = SBCols;
-    p[thread_id].PixelsPerLine = PixelsPerLine;
-    p[thread_id].mvList = mvList;
-    p[thread_id].InterError = &InterErrors[thread_id];
-    p[thread_id].IntraError = &IntraErrors[thread_id];
-    pthread_create(&threads[thread_id], NULL, ThreadPickModes, (void *)(&p[thread_id]));
-  }
-
-  p[thread_id].cpi = cpi;
-  p[thread_id].SBStartRow = SBrow;
-  SBrow += thread_SBRows[thread_id];
-  p[thread_id].SBEndRow = SBrow;
-  p[thread_id].SBCols = SBCols;
-  p[thread_id].PixelsPerLine = PixelsPerLine;
-  p[thread_id].mvList = mvList;
-  p[thread_id].InterError = &InterErrors[thread_id];
-  p[thread_id].IntraError = &IntraErrors[thread_id];
-
-  ThreadPickModes((void *)(&p[thread_id]));
-
-  /* Synchronize threads */
-  for (thread_id=0; thread_id<num_threads-1; thread_id++) {
-    pthread_join(threads[thread_id],NULL);
-  }
-
-  for ( thread_id=0; thread_id<num_threads; thread_id++ ) {
+  dispatch_group_wait(_group,DISPATCH_TIME_FOREVER);
+    
+  for( thread_id=0; thread_id<num_threads; thread_id++ ) {
     (*InterError) += InterErrors[thread_id];
     (*IntraError) += IntraErrors[thread_id];
   }
-
-  { /* Put the Motion Vectors on the cpi->MVList with the correct fragment order */
+        
+  {
+    // Put the Motion Vectors on the cpi->MVList with the correct fragment order
     int fragIndex;
     for (fragIndex=0; fragIndex < cpi->pb.UnitFragments; fragIndex++) {
       if( mvList[fragIndex].valid ) {
-	cpi->MVList[cpi->MvListCount].x = mvList[fragIndex].mv.x;
-	cpi->MVList[cpi->MvListCount].y = mvList[fragIndex].mv.y;
-	cpi->MvListCount++;
+        cpi->MVList[cpi->MvListCount].x = mvList[fragIndex].mv.x;
+        cpi->MVList[cpi->MvListCount].y = mvList[fragIndex].mv.y;
+        cpi->MvListCount++;
       }
     }
   }
-
+        
   free(thread_SBRows);
   free(p);
-  free(threads);
   free(InterErrors);
   free(IntraErrors);
   free(mvList);
-
-  /* Return number of pixels coded */
+        
+  // Return number of pixels coded
   return 0;
 }
 
