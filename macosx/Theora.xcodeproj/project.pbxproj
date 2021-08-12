@@ -102,7 +102,6 @@
 		097729930BCAC60000303091 /* codec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codec.h; path = ../include/theora/codec.h; sourceTree = SOURCE_ROOT; };
 		097729940BCAC60000303091 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = ../include/theora/theoradec.h; sourceTree = SOURCE_ROOT; };
 		09C8F6430C82FBE500F72188 /* libtheoradec.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtheoradec.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		32BAE0B70371A74B00C91783 /* Theora_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Theora_Prefix.pch; sourceTree = "<group>"; };
 		734A75BE09D76BB9002D8FAE /* theora.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = theora.h; path = ../include/theora/theora.h; sourceTree = SOURCE_ROOT; };
 		734A75C409D76C7E002D8FAE /* blockmap.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = blockmap.c; path = ../lib/enc/blockmap.c; sourceTree = SOURCE_ROOT; };
 		734A75C609D76C7E002D8FAE /* dct_decode.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = dct_decode.c; path = ../lib/enc/dct_decode.c; sourceTree = SOURCE_ROOT; };
@@ -220,7 +219,6 @@
 				734A75D309D76C7E002D8FAE /* pp.c */,
 				734A75D509D76C7E002D8FAE /* reconstruct.c */,
 				734A75D609D76C7E002D8FAE /* scan.c */,
-				32BAE0B70371A74B00C91783 /* Theora_Prefix.pch */,
 			);
 			name = Source;
 			sourceTree = "<group>";
