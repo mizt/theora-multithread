@@ -30,7 +30,7 @@
 #define PL 1
 #define HIGHBITDUPPED(X) (((ogg_int16_t) X)  >> 15)
 
-extern "C" {
+//extern "C" {
 
 static ogg_uint32_t QuadCodeComponent ( CP_INSTANCE *cpi,
                                  ogg_uint32_t FirstSB,
@@ -1594,4 +1594,4 @@ void WriteFrameHeader( CP_INSTANCE *cpi) {
   }
 }
 
-}
+//}
